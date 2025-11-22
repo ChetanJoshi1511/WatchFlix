@@ -3,10 +3,12 @@ import connectDB from "./db/db.js";
 import dotenv from "dotenv";
 import app from "./app.js";
 
+//configure dotenv to extract proces.env
 dotenv.config({
     path:'./.env'
 })
 
+//make connection to the database
 connectDB()
 .then(()=>{
     app.listen(process.env.PORT || 8000,()=>{

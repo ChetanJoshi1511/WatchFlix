@@ -28,6 +28,4 @@ app.use(express.urlencoded({
 
 app.use(cookieParser());
 
-/* */
-
 export default app;

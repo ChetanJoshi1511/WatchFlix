@@ -48,7 +48,7 @@ const userSchema  = new mongoose.Schema({
 userSchema.pre("save",async function (next){
     //run this pre hook only when password field is modified
     if(!this.isModified("password")) return next();
-    this.password = bcrypt.hash(this.password,saltRounds);
+    this.password = await bcrypt.hash(this.password,saltRounds);
     next();
 });
 
