@@ -6,4 +6,8 @@ const registerUser = asyncHandler(async (req,res)=>{
     })
 });
 
-export default registerUser;
+const loginUser = asyncHandler(async () =>{
+
+});
+
+export {registerUser,loginUser};

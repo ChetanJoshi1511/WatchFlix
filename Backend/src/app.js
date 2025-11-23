@@ -26,6 +26,14 @@ app.use(express.urlencoded({
     limit: "16kb"
 }));
 
-app.use(cookieParser());
+app.use(cookieParser()); //mount middleware cookieParser
+
+app.use(express.static("../public/data"));
+
+/*Routes*/
+import userRouter from "./routes/user.routes.js"
+
+app.use("/api/v1/users",userRouter); //mount the userRouter middleware
+
 
 export default app;
