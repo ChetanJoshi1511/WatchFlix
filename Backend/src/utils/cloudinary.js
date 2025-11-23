@@ -1,6 +1,5 @@
 import { v2 as cloudinary } from 'cloudinary';
 import fs from "fs";
-import { resourceLimits } from "worker_threads";
 
 /* First get the file from the user and store it temporarily on the server then upload it to cloudinary. Once it has been 
 done remove the file/ unlink the file descriptor opened from the server */
@@ -21,6 +20,7 @@ const uploadToCloudinary  = async (localFilePath)=>{
         return response;
     }catch(error){
         fs.unlinkSync(localFilePath); //remove the locally saved file
+        return null;
     }
 }
 
