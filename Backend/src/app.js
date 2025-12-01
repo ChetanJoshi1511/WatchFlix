@@ -14,7 +14,7 @@ app.use(express.json({
     //limit property limits the size of response recieved on the server
     limit: "100kb",
     //reviver takes a function which modifies key,value while response is parsing
-    reviver: (key,val) => key=="age" ? Number(value) : value, 
+    reviver: (key,val) => key=="age" ? Number(val) : val, 
     //strict property only allows json type responses to be received
     strict:false
 }));
@@ -28,10 +28,16 @@ app.use(express.urlencoded({
 
 app.use(cookieParser()); //mount middleware cookieParser
 
-app.use(express.static("../public/data"));
+// app.use(express.static("../public/data"));
+
+app.use((err,req,res,next)=>{
+    console.log(err);
+    res.status(err.status || 500);
+    next();
+});
 
 /*Routes*/
-import userRouter from "./routes/user.routes.js"
+import {userRouter} from "./routes/user.routes.js"
 
 app.use("/api/v1/users",userRouter); //mount the userRouter middleware
 
