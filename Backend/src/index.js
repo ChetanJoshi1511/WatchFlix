@@ -1,12 +1,9 @@
-import express from "express";
-import connectDB from "./db/db.js";
 import dotenv from "dotenv";
-import app from "./app.js";
+// ensure environment variables are loaded before importing other modules
+dotenv.config({ path: './.env' });
 
-//configure dotenv to extract proces.env
-dotenv.config({
-    path:'./.env'
-})
+import connectDB from "./db/db.js";
+import app from "./app.js";
 
 //make connection to the database
 connectDB()

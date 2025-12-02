@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+const {Schema} = mongoose;
 
-const userSchema  = new mongoose.Schema({
+const userSchema  = new Schema({
     username:{
         type: String,
         required: true,
@@ -45,6 +46,7 @@ const userSchema  = new mongoose.Schema({
     }
 },{timestamps:true});
 
+const saltRounds = 10;
 userSchema.pre("save",async function (next){
     //run this pre hook only when password field is modified
     if(!this.isModified("password")) return next();
