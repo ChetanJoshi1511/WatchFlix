@@ -1,7 +1,7 @@
 import asyncHandler from "../utils/asyncHandler.js"
 import apiError from "../utils/apiError.js";
 import {User} from "../models/user.model.js";
-import uploadToCloudinary from "../utils/cloudinary.js";
+import {uploadToCloudinary,deleteFromCloudinary} from "../utils/cloudinary.js";
 import apiResponse from "../utils/apiResponse.js";
 
 const registerUser = asyncHandler(async (req,res)=>{
@@ -37,9 +37,9 @@ const registerUser = asyncHandler(async (req,res)=>{
 
     //create user object  - create entry in db
     const userDocument = await User.create({
-        fullname,
-        email,
-        password,
+        fullname: fullname,
+        email:email,
+        password:password,
         username: username.toLowerCase(),
         avatar: avatarResponse.url,
         coverimage: coverimageResponse.url
@@ -51,7 +51,14 @@ const registerUser = asyncHandler(async (req,res)=>{
     )
 
     //check for user creation
-    if(!createdUser) throw apiError(500,"Cannot register user!");
+    if(!createdUser){
+        const del_avatar = deleteFromCloudinary(avatarResponse.public_id);
+        const del_coverimage = deleteFromCloudinary(coverimageResponse.public_id);
+        if(!del_avatar || del_coverimage){
+            console.warn("Files could not be deleted from cloudinary!");
+        }
+        throw apiError(500,"Cannot register user!");    
+    }
 
     //return response
     return res.status(201).json(

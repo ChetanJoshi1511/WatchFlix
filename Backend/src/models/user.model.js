@@ -20,7 +20,6 @@ const userSchema  = new Schema({
     fullname:{
         type: String,
         required: true,
-        unique:true,
         lowercase: true,
         index:true
     },
@@ -55,13 +54,13 @@ userSchema.pre("save",async function (next){
 });
 
 //add a custom method for our schema to validate password
-userSchema.methods.isPasswordCorrect = async (newPassword)=>{ 
+userSchema.methods.isPasswordCorrect = async function(newPassword){ 
     return await bcrypt.compare(newPassword,this.password); //compare() return true or false depending upon match result
 }
 
 //custom method for schema to generate access token
 userSchema.methods.generateAccessToken = function(){
-    return Promise((resolve,reject)=>{ //wrap jwt.sign() around Promise
+    return new Promise((resolve,reject)=>{ //wrap jwt.sign() around Promise
         jwt.sign({
             _id: this._id,
             email:this.email,
@@ -81,12 +80,12 @@ userSchema.methods.generateAccessToken = function(){
 
 //custom method for schema to generate refresh token
 userSchema.methods.generateRefreshToken = function(){
-    return Promise((resolve,reject)=>{ //wrap jwt.sign() around Promise
+    return new Promise((resolve,reject)=>{ //wrap jwt.sign() around Promise
         jwt.sign({
             _id: this._id,
         },process.env.REFRESH_TOKEN_SECRET,
         {
-            algorithm: HS256,
+            algorithm: "HS256",
             expiresIn: process.env.REFRESH_TOKEN_EXPIRY
         },
         (err,token)=>{ 
